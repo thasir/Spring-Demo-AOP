@@ -18,6 +18,8 @@ public class MainDemoApp {
 		theMembershipDAO.goToSleep();
 		// call the business method
 		Account myAccount = new Account();
+		myAccount.setName("Taseer");
+		myAccount.setLevel("Platinum");
 		theAccountDAO.addAccount(myAccount, true);
 		theAccountDAO.doWork();
 		// do it again
