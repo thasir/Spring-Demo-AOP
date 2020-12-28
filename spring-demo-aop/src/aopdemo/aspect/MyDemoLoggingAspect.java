@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class MyDemoLoggingAspect {
 	// this is where we add all of our related advices for logging
 	// lets start with before advice
-	@Before("execution(* add*())")
+	@Before("execution(* add*(aopdemo.Account,..))")
 	public void beforeAddAccountAdvice() {
 		System.out.println("\n====>>Executing @Before Advice on addAccount()");
 	}

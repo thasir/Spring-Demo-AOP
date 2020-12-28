@@ -16,11 +16,12 @@ public class MainDemoApp {
 		// call the membership method
 		theMembershipDAO.addAccount();
 		// call the business method
-		theAccountDAO.addAccount();
+		Account myAccount = new Account();
+		theAccountDAO.addAccount(myAccount,true);
 		// do it again
 		System.out.println("\n let's call it again!\n");
 		// call the business method again
-		theAccountDAO.addAccount();
+		theAccountDAO.addAccount(myAccount,true);
 		// close the context
 		context.close();
 	}
