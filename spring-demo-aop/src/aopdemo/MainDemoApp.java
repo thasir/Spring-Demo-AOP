@@ -24,6 +24,11 @@ public class MainDemoApp {
 		System.out.println("\n let's call it again!\n");
 		// call the business method again
 		theAccountDAO.addAccount(myAccount, true);
+		// call the getter and setter methods
+		theAccountDAO.setName("Thasir");
+		theAccountDAO.setServiceCode("silver");
+		String name = theAccountDAO.getName();
+		String code = theAccountDAO.getServiceCode();
 		// close the context
 		context.close();
 	}
