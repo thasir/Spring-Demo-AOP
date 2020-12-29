@@ -1,8 +1,10 @@
 package aopdemo.aspect;
 
+import java.util.List;
 import java.util.Objects;
 
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -16,6 +18,15 @@ import aopdemo.Account;
 @Component
 @Order(2)
 public class MyDemoLoggingAspect {
+	// add a new advice for @aafterreturning on the find accounts
+	@AfterReturning(pointcut = "execution(* aopdemo.dao.AccountDAO.findAccounts(..))", returning = "result")
+	public void afterReturningFindAccountsAdvice(JoinPoint theJoinPoint, List<Account> result) {
+		// print out which method we are advising on
+		String method = theJoinPoint.getSignature().toShortString();
+		System.out.println("\n====> executing @afterReturning on method: " + method);
+		// print out the results of the method call
+		System.out.println("\n====> result is : " + result);
+	}
 
 	// this is where we add all of our related advices for logging
 	// lets start with before advice
