@@ -2,6 +2,7 @@ package aopdemo.aspect;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -22,11 +23,13 @@ import aopdemo.Account;
 @Component
 @Order(2)
 public class MyDemoLoggingAspect {
+	private Logger myLogger = Logger.getLogger(getClass().getName());
+
 	@Around("execution(* aopdemo.service.*.getFortune(..))")
 	public Object aroundGetFortune(ProceedingJoinPoint theProceedingJoinPoint) throws Throwable {
 		// print out method we are advising on
 		String method = theProceedingJoinPoint.getSignature().toShortString();
-		System.out.println("\n====> executing @Around on method: " + method);
+		myLogger.info("\n====> executing @Around on method: " + method);
 		// get beginning time stamp
 		long begin = System.currentTimeMillis();
 		// now lets execute the method
@@ -35,7 +38,7 @@ public class MyDemoLoggingAspect {
 		long end = System.currentTimeMillis();
 		// compute and display the duration
 		long duration = end - begin;
-		System.out.println("\n====> Duration: " + duration / 1000.0 + " seconds");
+		myLogger.info("\n====> Duration: " + duration / 1000.0 + " seconds");
 		return result;
 	}
 
@@ -43,16 +46,16 @@ public class MyDemoLoggingAspect {
 	public void afterFinallyFindAccountAdvice(JoinPoint theJoinPoint) {
 		// printout which method we are advising on
 		String method = theJoinPoint.getSignature().toShortString();
-		System.out.println("\n====> executing @after (finally) on method: " + method);
+		myLogger.info("\n====> executing @after (finally) on method: " + method);
 	}
 
 	@AfterThrowing(pointcut = "execution(* aopdemo.dao.AccountDAO.findAccounts(..))", throwing = "theExc")
 	public void afterThrowingFindAccountAdvice(JoinPoint theJoinPoint, Throwable theExc) {
 		// printout which method we are advising on
 		String method = theJoinPoint.getSignature().toShortString();
-		System.out.println("\n====> executing @afterThrowing on method: " + method);
+		myLogger.info("\n====> executing @afterThrowing on method: " + method);
 		// log the exception
-		System.out.println("\n====> the exception is : " + theExc);
+		myLogger.info("\n====> the exception is : " + theExc);
 	}
 
 	// add a new advice for @aafterreturning on the find accounts
@@ -60,13 +63,13 @@ public class MyDemoLoggingAspect {
 	public void afterReturningFindAccountsAdvice(JoinPoint theJoinPoint, List<Account> result) {
 		// print out which method we are advising on
 		String method = theJoinPoint.getSignature().toShortString();
-		System.out.println("\n====> executing @afterReturning on method: " + method);
+		myLogger.info("\n====> executing @afterReturning on method: " + method);
 		// print out the results of the method call
-		System.out.println("\n====> result is : " + result);
+		myLogger.info("\n====> result is : " + result);
 		// lets post process the data ...lets modify it
 		// convert the account name to uppercase
 		convertAccountNamesToUppercase(result);
-		System.out.println("\n====> result is : " + result);
+		myLogger.info("\n====> result is : " + result);
 	}
 
 	private void convertAccountNamesToUppercase(List<Account> result) {
@@ -84,22 +87,22 @@ public class MyDemoLoggingAspect {
 	// lets start with before advice
 	@Before("aopdemo.aspect.LuvAopExperssions.forDaoPackageNoGetterSetter()")
 	public void beforeAddAccountAdvice(JoinPoint theJoinPoint) {
-		System.out.println("\n====>>Executing @Before Advice on addAccount()");
+		myLogger.info("\n====>>Executing @Before Advice on addAccount()");
 
 		// display the method signatture
 		MethodSignature methodSig = (MethodSignature) theJoinPoint.getSignature();
-		System.out.println("Method: " + methodSig);
+		myLogger.info("Method: " + methodSig);
 		// display method arguments
 		// get args
 		Object[] args = theJoinPoint.getArgs();
 		// loop through args
 		for (Object tempArg : args) {
-			System.out.println(tempArg);
+			myLogger.info(tempArg.toString());
 			if (tempArg instanceof Account) {
 				// downcast and print account specific stuff
 				Account theAccount = (Account) tempArg;
-				System.out.println("Account Name: " + theAccount.getName());
-				System.out.println("Account Level: " + theAccount.getLevel());
+				myLogger.info("Account Name: " + theAccount.getName());
+				myLogger.info("Account Level: " + theAccount.getLevel());
 			}
 		}
 	}
