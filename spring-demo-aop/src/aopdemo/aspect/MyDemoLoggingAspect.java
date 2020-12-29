@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Objects;
 
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -20,6 +22,23 @@ import aopdemo.Account;
 @Component
 @Order(2)
 public class MyDemoLoggingAspect {
+	@Around("execution(* aopdemo.service.*.getFortune(..))")
+	public Object aroundGetFortune(ProceedingJoinPoint theProceedingJoinPoint) throws Throwable {
+		// print out method we are advising on
+		String method = theProceedingJoinPoint.getSignature().toShortString();
+		System.out.println("\n====> executing @Around on method: " + method);
+		// get beginning time stamp
+		long begin = System.currentTimeMillis();
+		// now lets execute the method
+		Object result = theProceedingJoinPoint.proceed();
+		// get the ending time stamp
+		long end = System.currentTimeMillis();
+		// compute and display the duration
+		long duration = end - begin;
+		System.out.println("\n====> Duration: " + duration / 1000.0 + " seconds");
+		return result;
+	}
+
 	@After("execution(* aopdemo.dao.AccountDAO.findAccounts(..))")
 	public void afterFinallyFindAccountAdvice(JoinPoint theJoinPoint) {
 		// printout which method we are advising on
