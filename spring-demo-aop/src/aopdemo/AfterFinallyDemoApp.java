@@ -17,7 +17,7 @@ public class AfterFinallyDemoApp {
 		List<Account> theAccounts = null;
 		try {
 			// add a boolean flag to simulate an exception
-			boolean tripWire = false;
+			boolean tripWire = true;
 			theAccounts = theAccountDAO.findAccounts(tripWire);
 		} catch (Exception exc) {
 			System.out.println("\n\nMain program...caught exception: " + exc);
