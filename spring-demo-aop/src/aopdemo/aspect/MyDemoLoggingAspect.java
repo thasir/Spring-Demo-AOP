@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
@@ -19,6 +20,13 @@ import aopdemo.Account;
 @Component
 @Order(2)
 public class MyDemoLoggingAspect {
+	@After("execution(* aopdemo.dao.AccountDAO.findAccounts(..))")
+	public void afterFinallyFindAccountAdvice(JoinPoint theJoinPoint) {
+		// printout which method we are advising on
+		String method = theJoinPoint.getSignature().toShortString();
+		System.out.println("\n====> executing @after (finally) on method: " + method);
+	}
+
 	@AfterThrowing(pointcut = "execution(* aopdemo.dao.AccountDAO.findAccounts(..))", throwing = "theExc")
 	public void afterThrowingFindAccountAdvice(JoinPoint theJoinPoint, Throwable theExc) {
 		// printout which method we are advising on
