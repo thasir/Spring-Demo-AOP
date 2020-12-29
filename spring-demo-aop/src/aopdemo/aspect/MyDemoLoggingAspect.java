@@ -39,8 +39,8 @@ public class MyDemoLoggingAspect {
 		} catch (Exception e) {
 			// log the exception
 			myLogger.warning(e.getMessage());
-			// give user a custom message
-			result = "Major Accident! but no Worries!" + " Your Private AOP Helicopter is on the way!";
+			// rethrow exception
+			throw e;
 		}
 		// get the ending time stamp
 		long end = System.currentTimeMillis();
